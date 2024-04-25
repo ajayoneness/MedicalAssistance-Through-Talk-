@@ -1,0 +1,141 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASHBOARD | MEDICAL ASSISTANT</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+
+
+    <!-- Navigation -->
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#" style="font-weight: bold; font-size: 30px;">MEDICAL ASSISTANT   </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'patientlist' %}">Patient List</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Logout</a>
+              </li>
+              
+            </ul>
+           
+          </div>
+        </div>
+      </nav>
+
+
+
+
+    <!-- navigation End -->
+
+
+
+    <section class="container ">
+
+
+      <div class="row">
+
+
+        <div class="col-sm-12 col-lg-7 col-md-12" style="margin-top:10px">
+          <h3 class="text-center">Patient Conversation Recorder</h3>
+          <br>
+           <div class="" style="display:flex;">
+
+            <button id="startrec" class="btn btn-success m-3" onclick="startRecording()">START RECORDING</button>
+            <button id="stoprec" class="btn btn-danger m-3" onclick="stopRecording()" disabled>STOP RECORDING</button>
+            
+
+           </div>
+
+
+          <form method="post">
+
+            {% csrf_token %}
+
+            <textarea name="rectext" id="transcriptionTextArea" placeholder="Recorded Text" style="width: 100%; height: 300px;">{{rectext}}</textarea>
+            <audio id="audioPlayer" controls style="display: none;"></audio>
+            <input class="btn btn-info m-3" type="submit" value="Generate Data">
+
+
+          </form>
+
+           
+
+        </div>
+
+
+
+        <div class="col-sm-12 col-lg-5 col-md-12 p-2" style="margin-top:10px">
+
+          <h3>Patient Details</h3>
+          <br><br><br><br>
+          <div class="card p-3">
+            <h5>Name: {{entity.name}}</h5>
+            <h5>Age: {{entity.age}}</h5>
+            <h5>Weight: {{entity.weight}}</h5>
+            <h5>Symptoms: <span style="color: red;">{{entity.symptoms}}</span></h5>
+            <!-- <h4>ALLERGIES:</h4> -->
+
+          </div>
+          
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+
+    <br><br>
+
+    <script>
+      const recognition = new webkitSpeechRecognition(); // Create a new instance of SpeechRecognition
+      recognition.continuous = true; // Enable continuous recognition
+      recognition.lang = 'en-US'; // Set recognition language to English (US)
+
+      let transcription = ''; // Variable to store the transcription
+
+      // Start recording when the start button is clicked
+      document.getElementById('startrec').addEventListener('click', () => {
+          recognition.start();
+          document.getElementById('startrec').disabled = true;
+          document.getElementById('stoprec').disabled = false;
+      });
+
+      // Stop recording when the stop button is clicked
+      document.getElementById('stoprec').addEventListener('click', () => {
+          recognition.stop();
+          document.getElementById('startrec').disabled = false;
+          document.getElementById('stoprec').disabled = true;
+      });
+
+      // Process the recognition result
+      recognition.onresult = (event) => {
+          const result = event.results[event.results.length - 1][0].transcript; // Get the final transcription
+          transcription += result + ' '; // Append the transcription to the variable
+          document.getElementById('transcriptionTextArea').innerText = transcription; // Display the transcription
+      };
+
+      // Handle recognition errors
+      recognition.onerror = (event) => {
+          console.error('Recognition error:', event.error);
+      };
+  </script>
+</body>
+</html>
