@@ -59,6 +59,9 @@
               <th>Age</th>
               <th>Weight</th>
               <th>Symptoms</th>
+              <th>Medicine</th>
+              <th>Allergy</th>
+              <th>Previous Medication</th>
               <th>Nationality</th>
               <th>Action</th>
           
@@ -75,6 +78,9 @@
             <td>{{p.age}}</td>
             <td>{{p.weight}}</td>
             <td style="color: rgb(184, 10, 10);">{{p.symptoms}}</td>
+            <td style="color: rgb(10, 91, 184);">{{p.medicine}}</td>
+            <td style="color: rgb(114, 10, 184);">{{p.allergy}}</td>
+            <td style="color: rgb(10, 184, 170);">{{p.previous_medication}}</td>
             <td>Indian</td>
             <td>
               <a href="/patientprofile/{{p.id}}" class="btn btn-info">View</a>
